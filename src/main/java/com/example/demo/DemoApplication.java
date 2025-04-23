@@ -23,7 +23,7 @@ public class DemoApplication {
         for (SciencePlan sp : sciencePlans) {
             System.out.println(sp);
         }
-//        execute();
+        execute();
     }
 
     public static void getAllSciencePlans() {
@@ -204,6 +204,19 @@ public class DemoApplication {
         }
     }
 
+    public static void updateConfiguration() {
+        System.out.println("\nCase 14: Get and update the configuration");
+        // Case 14: update configuration
+        try {
+            ocs.getDefaultConfiguration();
+            ocs.getCurrentConfiguration();
+            String msgSts = ocs.updateConfiguration();
+            System.out.println(msgSts);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void execute() {
         getAllSciencePlans();
         getSciencePlanById(2);
@@ -217,6 +230,7 @@ public class DemoApplication {
         testSciencePlan();
         createObservingProgram();
         manageObservationSchedule();
+        updateConfiguration();
     }
 
 }

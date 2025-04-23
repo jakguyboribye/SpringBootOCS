@@ -18,4 +18,11 @@ public class DemoController {
         System.out.println(o.getAllSciencePlans());
         return o.getAllSciencePlans();
     }
+
+    @CrossOrigin
+    @GetMapping("/sp")
+    public SciencePlan getSciencePlan(@RequestParam(name="id", required=false, defaultValue="1") int id) {
+        OCS o = new OCS();
+        return o.getSciencePlanByNo(Integer.valueOf(id));
+    }
 }
