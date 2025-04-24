@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Science Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f7f6;
+        }
+        .form-container {
+            width: 50%;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .btn-submit, .btn-proceed {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .btn-proceed {
+            background-color: #007BFF;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #secondPartForm {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Create Science Plan</h1>
+    <form id="sciencePlanForm">
+
+        <!-- Error Message -->
+        <div id="error-message" class="error-message" style="display:none;">
+            <p>Please fill in all required fields and ensure the start date is before the end date.</p>
+        </div>
+
+        <!-- First part of the form -->
+        <div id="firstPartForm">
+            <div class="form-group">
+                <label for="creator">Creator</label>
+                <input type="text" id="creator" name="creator" placeholder="Enter the name of the creator" required>
+            </div>
+            <div class="form-group">
+                <label for="submitter">Submitter</label>
+                <input type="text" id="submitter" name="submitter" placeholder="Enter the name of the submitter" required>
+            </div>
+            <div class="form-group">
+                <label for="fundingInUSD">Funding (USD)</label>
+                <input type="number" id="fundingInUSD" name="fundingInUSD" step="0.01" placeholder="Enter the funding amount" required>
+            </div>
+            <div class="form-group">
+                <label for="objectives">Objectives</label>
+                <textarea id="objectives" name="objectives" placeholder="Enter the objectives of the science plan" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="starSystem">Star System</label>
+                <select id="starSystem" name="starSystem" required>
+                    <option value="">-- Select a Star System --</option>
+                    <option value="ComaBerenices">ComaBerenices</option>
+                    <option value="Vela">Vela</option>
+                    <option value="Norma">Norma</option>
+                    <option value="Taurus">Taurus</option>
+                    <option value="Vulpecula">Vulpecula</option>
+                    <option value="Pavo">Pavo</option>
+                    <option value="Sagitta">Sagitta</option>
+                    <option value="Hercules">Hercules</option>
+                    <option value="Centaurus">Centaurus</option>
+                    <option value="Pisces">Pisces</option>
+                    <option value="Lyra">Lyra</option>
+                    <option value="Indus">Indus</option>
+                    <option value="Draco">Draco</option>
+                    <option value="Cancer">Cancer</option>
+                    <option value="Horologium">Horologium</option>
+                    <option value="Orion">Orion</option>
+                    <option value="Delphinus">Delphinus</option>
+                    <option value="Virgo">Virgo</option>
+                    <option value="Carina">Carina</option>
+                    <option value="Scorpius">Scorpius</option>
+                    <option value="PiscisAustrinus">PiscisAustrinus</option>
+                    <option value="UrsaMajor">UrsaMajor</option>
+                    <option value="Crater">Crater</option>
+                    <option value="Ara">Ara</option>
+                    <option value="CoronaBorealis">CoronaBorealis</option>
+                    <option value="Tucana">Tucana</option>
+                    <option value="Eridanus">Eridanus</option>
+                    <option value="CoronaAustralis">CoronaAustralis</option>
+                    <option value="Lynx">Lynx</option>
+                    <option value="Sextans">Sextans</option>
+                    <option value="Circinus">Circinus</option>
+                    <option value="CanesVenatici">CanesVenatici</option>
+                    <option value="Pegasus">Pegasus</option>
+                    <option value="Equuleus">Equuleus</option>
+                    <option value="Lupus">Lupus</option>
+                    <option value="Lacerta">Lacerta</option>
+                    <option value="Andromeda">Andromeda</option>
+                    <option value="Reticulum">Reticulum</option>
+                    <option value="Microscopium">Microscopium</option>
+                    <option value="Puppis">Puppis</option>
+                    <option value="Cetus">Cetus</option>
+                    <option value="Cassiopeia">Cassiopeia</option>
+                    <option value="Volans">Volans</option>
+                    <option value="Libra">Libra</option>
+                    <option value="Lepus">Lepus</option>
+                    <option value="Aquila">Aquila</option>
+                    <option value="Cygnus">Cygnus</option>
+                    <option value="Fornax">Fornax</option>
+                    <option value="Hydrus">Hydrus</option>
+                    <option value="Triangulum">Triangulum</option>
+                    <option value="LeoMinor">LeoMinor</option>
+                    <option value="Octans">Octans</option>
+                    <option value="Scutum">Scutum</option>
+                    <option value="Grus">Grus</option>
+                    <option value="Perseus">Perseus</option>
+                    <option value="Sculptor">Sculptor</option>
+                    <option value="Phoenix">Phoenix</option>
+                    <option value="Aquarius">Aquarius</option>
+                    <option value="Crux">Crux</option>
+                    <option value="Leo">Leo</option>
+                    <option value="TriangulumAustrale">TriangulumAustrale</option>
+                    <option value="Caelum">Caelum</option>
+                    <option value="CanisMajor">CanisMajor</option>
+                    <option value="Mensa">Mensa</option>
+                    <option value="Cepheus">Cepheus</option>
+                    <option value="Monoceros">Monoceros</option>
+                    <option value="Auriga">Auriga</option>
+                    <option value="Sagittarius">Sagittarius</option>
+                    <option value="UrsaMinor">UrsaMinor</option>
+                    <option value="Apus">Apus</option>
+                    <option value="Ophiuchus">Ophiuchus</option>
+                    <option value="Serpens">Serpens</option>
+                    <option value="Hydra">Hydra</option>
+                    <option value="Musca">Musca</option>
+                    <option value="Gemini">Gemini</option>
+                    <option value="Boötes">Boötes</option>
+                    <option value="Antlia">Antlia</option>
+                    <option value="Aries">Aries</option>
+                    <option value="Chamaeleon">Chamaeleon</option>
+                    <option value="Corvus">Corvus</option>
+                    <option value="CanisMinor">CanisMinor</option>
+                    <option value="Telescopiu">Telescopiu</option>
+                    <option value="Camelopardalis">Camelopardalis</option>
+                    <option value="Pictor">Pictor</option>
+                    <option value="Columba">Columba</option>
+                    <option value="Pyxis">Pyxis</option>
+                    <option value="Capricornus">Capricornus</option>
+                    <option value="Dorado">Dorado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="datetime-local" id="startDate" name="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="datetime-local" id="endDate" name="endDate" required>
+            </div>
+            <button type="button" class="btn-proceed" onclick="validateForm()">Proceed</button>
+        </div>
+
+        <!-- Second part of the form (hidden initially) -->
+        <div id="secondPartForm">
+            <div class="form-group">
+                <label>Telescope Location</label><br>
+                <label style="margin-right: 20px;">
+                    <input type="radio" name="telescopeLocation" value="CHILE" required>
+                    CHILE
+                </label>
+                <label>
+                    <input type="radio" name="telescopeLocation" value="HAWAII" required>
+                    HAWAII
+                </label>
+            </div>
+            <h3>Data Processing Requirements</h3>
+
+            <!-- Dropdown for fileType -->
+            <div class="form-group">
+                <label for="fileType">File Type</label>
+                <select id="fileType" name="dataProcRequirements[0].fileType" required>
+                    <option value="JPG">JPG</option>
+                    <option value="PNG">PNG</option>
+                    <option value="HEIF">HEIF</option>
+                    <option value="TIFF">TIFF</option>
+                </select>
+            </div>
+
+            <!-- Dropdown for fileQuality -->
+            <div class="form-group">
+                <label for="fileQuality">File Quality</label>
+                <select id="fileQuality" name="dataProcRequirements[0].fileQuality" required>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="fine">Fine</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+
+            <!-- Dropdown for colorType -->
+            <div class="form-group">
+                <label for="colorType">Color Type</label>
+                <select id="colorType" name="dataProcRequirements[0].colorType" required>
+                    <option value="RGB">RGB</option>
+                    <option value="Grayscale">Grayscale</option>
+                    <option value="CMYK">CMYK</option>
+                    <option value="HSV">HSV</option>
+                </select>
+            </div>
+
+            <!-- Numerical fields with placeholders for ranges -->
+            <div class="form-group">
+                <label for="contrast">Contrast (Range: 0 to 100)</label>
+                <input type="number" id="contrast" name="dataProcRequirements[0].contrast" step="1" min="0" max="100" placeholder="Enter contrast value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="brightness">Brightness (Range: -100 to 100)</label>
+                <input type="number" id="brightness" name="dataProcRequirements[0].brightness" step="1" min="-100" max="100" placeholder="Enter brightness value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="saturation">Saturation (Range: 0 to 100)</label>
+                <input type="number" id="saturation" name="dataProcRequirements[0].saturation" step="1" min="0" max="100" placeholder="Enter saturation value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="highlights">Highlights (Range: 0 to 100)</label>
+                <input type="number" id="highlights" name="dataProcRequirements[0].highlights" step="1" min="0" max="100" placeholder="Enter highlights value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="exposure">Exposure (Range: -10 to 10)</label>
+                <input type="number" id="exposure" name="dataProcRequirements[0].exposure" step="1" min="-10" max="10" placeholder="Enter exposure value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="shadows">Shadows (Range: 0 to 100)</label>
+                <input type="number" id="shadows" name="dataProcRequirements[0].shadows" step="1" min="0" max="100" placeholder="Enter shadows value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="whites">Whites (Range: 0 to 100)</label>
+                <input type="number" id="whites" name="dataProcRequirements[0].whites" step="1" min="0" max="100" placeholder="Enter whites value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="blacks">Blacks (Range: 0 to 100)</label>
+                <input type="number" id="blacks" name="dataProcRequirements[0].blacks" step="1" min="0" max="100" placeholder="Enter blacks value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="luminance">Luminance (Range: 0 to 255)</label>
+                <input type="number" id="luminance" name="dataProcRequirements[0].luminance" step="1" min="0" max="255" placeholder="Enter luminance value between 0 and 10" required>
+            </div>
+            <div class="form-group">
+                <label for="hue">Hue (Range: 0 to 360)</label>
+                <input type="number" id="hue" name="dataProcRequirements[0].hue" step="0.1" min="0" max="360" placeholder="Enter hue value between 0 and 360" required>
+            </div>
+            <button type="submit" class="btn-submit" onclick="validateForm()">Create Science Plan</button>
+        </div>
+
+    </form>
+    <div id="api-response" style="display:none; margin-top: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;"></div>
+</div>
+
+<script>
+    // Function to validate the form and call the API
+    function validateForm() {
+        // Clear any previous error message
+        document.getElementById('error-message').style.display = 'none';
+        document.getElementById('api-response').style.display = 'none'; // Hide response initially
+
+        var errorMessages = [];
+
+        // Get all the first part fields
+        var creator = document.getElementById('creator').value;
+        var submitter = document.getElementById('submitter').value;
+        var funding = document.getElementById('fundingInUSD').value;
+        var objectives = document.getElementById('objectives').value;
+        var starSystem = document.getElementById('starSystem').value;
+        var startDate = document.getElementById('startDate').value;
+        var endDate = document.getElementById('endDate').value;
+
+        // Check if all fields in the first part are filled
+        if (!creator) {
+            errorMessages.push("Creator is required.");
+        }
+        if (!submitter) {
+            errorMessages.push("Submitter is required.");
+        }
+        if (!funding || funding <= 0) {
+            errorMessages.push("Funding must be a positive number.");
+        }
+        if (!objectives) {
+            errorMessages.push("Objectives are required.");
+        }
+        if (!starSystem) {
+            errorMessages.push("Star system is required.");
+        }
+
+        // Check if start date is before end date
+        if (new Date(startDate) >= new Date(endDate)) {
+            errorMessages.push("Start date cannot be after the end date.");
+        }
+
+        // Show second part form only if first part is valid
+        if (errorMessages.length === 0) {
+            document.getElementById('secondPartForm').style.display = 'block';
+        } else {
+            document.getElementById('secondPartForm').style.display = 'none';
+        }
+
+        // Get second part fields (but don't validate them yet)
+        var telescopeLocation = document.querySelector('input[name="telescopeLocation"]:checked');
+        if (telescopeLocation) {
+            // If telescope location is selected, validate other fields in the second part
+            var fileType = document.getElementById('fileType').value;
+            var fileQuality = document.getElementById('fileQuality').value;
+            var colorType = document.getElementById('colorType').value;
+            var contrast = document.getElementById('contrast').value;
+            var brightness = document.getElementById('brightness').value;
+            var saturation = document.getElementById('saturation').value;
+            var highlights = document.getElementById('highlights').value;
+            var exposure = document.getElementById('exposure').value;
+            var shadows = document.getElementById('shadows').value;
+            var whites = document.getElementById('whites').value;
+            var blacks = document.getElementById('blacks').value;
+            var luminance = document.getElementById('luminance').value;
+            var hue = document.getElementById('hue').value;
+
+            // Validate second part fields (data processing requirements)
+            if (!fileType) {
+                errorMessages.push("File type is required.");
+            }
+            if (!fileQuality) {
+                errorMessages.push("File quality is required.");
+            }
+            if (!colorType) {
+                errorMessages.push("Color type is required.");
+            }
+            if (contrast < 0 || contrast > 100) {
+                errorMessages.push("Contrast must be between 0 and 100.");
+            }
+            if (brightness < -100 || brightness > 100) {
+                errorMessages.push("Brightness must be between -100 and 100.");
+            }
+            if (saturation < 0 || saturation > 100) {
+                errorMessages.push("Saturation must be between 0 and 100.");
+            }
+            if (highlights < 0 || highlights > 100) {
+                errorMessages.push("Highlights must be between 0 and 100.");
+            }
+            if (exposure < -10 || exposure > 10) {
+                errorMessages.push("Exposure must be between -10 and 10.");
+            }
+            if (shadows < 0 || shadows > 100) {
+                errorMessages.push("Shadows must be between 0 and 100.");
+            }
+            if (whites < 0 || whites > 100) {
+                errorMessages.push("Whites must be between 0 and 100.");
+            }
+            if (blacks < 0 || blacks > 100) {
+                errorMessages.push("Blacks must be between 0 and 100.");
+            }
+            if (luminance < 0 || luminance > 255) {
+                errorMessages.push("Luminance must be between 0 and 255.");
+            }
+            if (hue < 0 || hue > 360) {
+                errorMessages.push("Hue must be between 0 and 360.");
+            }
+        }
+
+        // If there are any errors, display them
+        if (errorMessages.length > 0) {
+            var errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.innerHTML = '<p>' + errorMessages.join('</p><p>') + '</p>';
+            errorMessageDiv.style.display = 'block';
+            return;
+        }
+
+        // Format dates to dd/MM/yyyy HH:mm:ss
+        const formatDate = (date) => {
+            const d = new Date(date);
+            let day = d.getDate();
+            let month = d.getMonth() + 1; // months are 0-based
+            const year = d.getFullYear();
+            const hours = d.getHours();
+            const minutes = d.getMinutes();
+            const seconds = d.getSeconds();
+
+            day = (day < 10 ? '0' : '') + day;
+            month = (month < 10 ? '0' : '') + month;
+
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        };
+
+        // Create the science plan object from the form data
+        var sciencePlan = {
+            creator: creator,
+            submitter: submitter,
+            fundingInUSD: funding,
+            objectives: objectives,
+            starSystem: starSystem,
+            startDate: formatDate(startDate),
+            endDate: formatDate(endDate),
+            telescopeLocation: telescopeLocation.value,
+            dataProcRequirements: {
+                fileType: fileType,
+                fileQuality: fileQuality,
+                colorType: colorType,
+                contrast: contrast,
+                brightness: brightness,
+                saturation: saturation,
+                highlights: highlights,
+                exposure: exposure,
+                shadows: shadows,
+                whites: whites,
+                blacks: blacks,
+                luminance: luminance,
+                hue: hue
+            }
+        };
+
+        // Debug print the science plan object
+        console.log("Science Plan to be sent to API:", JSON.stringify(sciencePlan, null, 2));
+
+        // Call the API to create the science plan
+        // Call the API to create the science plan
+fetch('http://localhost:8080/createscienceplan', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(sciencePlan)
+})
+.then(data => {
+    // Redirect after short delay (optional: 1 second for visibility)
+    setTimeout(() => {
+        window.location.href = '/AstronomerHome';
+    }, 1000);
+})
+.catch(error => {
+    // Log the error to the console
+    console.error('There was a problem with the fetch operation:', error);
+});
+
+    }
+</script>
+
+</body>
+</html>

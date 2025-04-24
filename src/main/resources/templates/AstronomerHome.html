@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Science Plans</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        h1 {
+            color: #222;
+            margin-bottom: 30px;
+        }
+
+        .btn-create {
+            background-color: #007BFF;
+            color: white;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .btn-create:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e2e2;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: 600;
+            font-size: 14px;
+            color: #555;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .btn-details {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-details:hover {
+            background-color: #218838;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .details-row {
+            display: none;
+            background-color: #fdfdfd;
+        }
+
+        .details-section {
+            margin-bottom: 20px;
+        }
+
+        .details-section h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .details-section pre, .details-section p {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        .data-table th, .data-table td {
+            padding: 8px 10px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f1f1f1;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+<h1>Science Plans</h1>
+<a href="/CreateSP" class="btn-create">Create Science Plan</a>
+<button class="btn-create" style="background-color: #dc3545;" onclick="deleteAllPlans()">Delete All Science Plans</button>
+<table id="plansTable">
+    <thead>
+    <tr>
+        <th>Plan No</th>
+        <th>Creator</th>
+        <th>Submitter</th>
+        <th>Status</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Data will be populated dynamically here -->
+    </tbody>
+</table>
+
+<script>
+    fetch('/getallscienceplan')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector("#plansTable tbody");
+            data.forEach(plan => {
+                const row = `
+                    <tr>
+                        <td>${plan.planNo}</td>
+                        <td>${plan.creator}</td>
+                        <td>${plan.submitter}</td>
+                        <td>${plan.status}</td>
+                        <td><button class="btn-details" onclick="toggleDetails('${plan.planNo}')">Details</button></td>
+                        <td><button class="btn-delete" onclick="deletePlan(${plan.planNo})">Delete</button></td>
+                    </tr>
+                    <tr class="details-row" id="details-${plan.planNo}">
+                        <td colspan="6">
+                            <div class="details-section">
+                                <h3>Objectives</h3>
+                                <pre>${plan.objectives}</pre>
+                            </div>
+                            <div class="details-section">
+                                <h3>Funding (USD)</h3>
+                                <p>${plan.fundingInUSD}</p>
+                            </div>
+                            <div class="details-section">
+                                <h3>Star System</h3>
+                                <p>${plan.starSystem}</p>
+                            </div>
+                            <div class="details-section">
+                                <h3>Telescope Location</h3>
+                                <p>${plan.telescopeLocation}</p>
+                            </div>
+                            <div class="details-section">
+                                <h3>Start Date</h3>
+                                <p>${plan.startDate}</p>
+                            </div>
+                            <div class="details-section">
+                                <h3>End Date</h3>
+                                <p>${plan.endDate}</p>
+                            </div>
+                            <div class="details-section">
+                                <h3>Data Processing Requirements</h3>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>File Type</th>
+                                            <th>File Quality</th>
+                                            <th>Color Type</th>
+                                            <th>Contrast</th>
+                                            <th>Brightness</th>
+                                            <th>Saturation</th>
+                                            <th>Highlights</th>
+                                            <th>Exposure</th>
+                                            <th>Shadows</th>
+                                            <th>Whites</th>
+                                            <th>Blacks</th>
+                                            <th>Luminance</th>
+                                            <th>Hue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${plan.dataProcRequirements.map(req => `
+                                            <tr>
+                                                <td>${req.fileType}</td>
+                                                <td>${req.fileQuality}</td>
+                                                <td>${req.colorType}</td>
+                                                <td>${req.contrast}</td>
+                                                <td>${req.brightness}</td>
+                                                <td>${req.saturation}</td>
+                                                <td>${req.highlights}</td>
+                                                <td>${req.exposure}</td>
+                                                <td>${req.shadows}</td>
+                                                <td>${req.whites}</td>
+                                                <td>${req.blacks}</td>
+                                                <td>${req.luminance}</td>
+                                                <td>${req.hue}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        })
+        .catch(err => console.error("Failed to fetch plans:", err));
+
+    // Function to toggle visibility of the details row
+    function toggleDetails(planNo) {
+        const detailsRow = document.getElementById(`details-${planNo}`);
+        if (detailsRow.style.display === "none" || detailsRow.style.display === "") {
+            detailsRow.style.display = "table-row";
+        } else {
+            detailsRow.style.display = "none";
+        }
+    }
+
+    // Function to delete a single plan by its planNo
+    function deletePlan(planNo) {
+        if (confirm("Are you sure you want to delete this science plan?")) {
+            fetch(`/deletescienceplanbyid?planNo=${planNo}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                location.reload(); // Refresh to reflect deletion
+            })
+            .catch(err => {
+                console.error("Failed to delete plan:", err);
+                alert("Failed to delete science plan.");
+            });
+        }
+    }
+
+    // Function to delete all science plans
+    function deleteAllPlans() {
+        if (confirm("Are you sure you want to delete all science plans?")) {
+            fetch('/deleteallscienceplan', {
+                method: 'DELETE'
+            })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                location.reload(); // Refresh to reflect deletion
+            })
+            .catch(err => {
+                console.error("Failed to delete plans:", err);
+                alert("Failed to delete science plans.");
+            });
+        }
+    }
+</script>
+</body>
+</html>
